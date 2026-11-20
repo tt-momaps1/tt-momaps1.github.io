@@ -93,7 +93,7 @@ button.danger{color:var(--danger)}
     <button id="clear" class="danger" disabled>Start over</button>
     <p id="status"></p>
     <p id="loan"><strong>Loan requirements.</strong> The artworks in the reference strip need daily monitoring by a registrar. Document each one at opening and closing.</p>
-    <p id="hint">Export opens the iPad share sheet. Choose Drive or Save to Files.</p>
+    <p id="hint">Export opens the iPad share sheet. To save to Google Drive: tap Drive, choose Folder (My Drive) &gt; My Drive &gt; Hard Art Checks, then tap Save.</p>
   </aside>
 </main>
 <div id="strip" aria-label="Photos taken"></div>
@@ -278,8 +278,8 @@ $('export').onclick=async()=>{
   try{
     const items=[];
     for(const p of photos) items.push({w:p.w,h:p.h,bytes:new Uint8Array(await p.blob.arrayBuffer())});
-    const d=new Date(), z=v=>String(v).padStart(2,'0');
-    const base='Hard Art Checks - '+d.getFullYear()+'-'+z(d.getMonth()+1)+'-'+z(d.getDate())+' '+z(d.getHours())+'-'+z(d.getMinutes());
+    const d=new Date(), z=v=>String(v).padStart(2,'0'), h12=d.getHours()%12||12, ap=d.getHours()<12?'AM':'PM';
+    const base='Hard Art Checks - '+d.getFullYear()+'-'+z(d.getMonth()+1)+'-'+z(d.getDate())+' '+z(h12)+':'+z(d.getMinutes())+' '+ap;
     const name=base+'.pdf';
     const pdf=buildPdf(items,base);
     const file=new File([pdf],name,{type:'application/pdf'});
